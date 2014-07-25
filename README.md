@@ -22,7 +22,7 @@
 express-loggly
 ===================
 
-Express middleware to send JSON formatted logs to Loggly from an Express application.  It depends on [node-loggly](https://github.com/nodejitsu/node-loggly) by nodejitsu.
+Express middleware to send JSON formatted logs to Loggly from an Express application.  It uses [node-loggly](https://github.com/nodejitsu/node-loggly) by nodejitsu.
 
 ##Install
 
@@ -34,18 +34,20 @@ Prepare like so
 
     var config = {
         token: 'your-really-long-input-token',
-        subdomain: 'your-subdomain',
-        tags: ['loggly-tag1', 'loggly-tag2', .., 'loggly-tagn'] 
+        subdomain: 'your-loggly-subdomain',
+        tags: ['tag1', 'tag2', ... 'tagN'] 
     };
 
     var logger  = require('express-loggly')(config);
     
 
 logger now has 2 methods for Express middleware:
+
 - requestLogger
 - errorLogger
 
 And logger has an additional ad-hoc methods for logging
+
 - debug, info, log, warn, error
 
 ###Middleware
@@ -84,7 +86,8 @@ The first parameter may be a string, object or an instance of an error. The mess
     {
         level     : 'DEBUG'        // Or INFO, LOG, WARN, ERROR
         pid       : 1234,          // whatever is returned by process.id 
-        machine   : 'server_name', // whatever is returned by require('os').hostname  : 'req.hostname' // e.g. Localhost or your domain
+        machine   : 'server_name', // whatever is returned by require('os')
+        hostname  : 'req.hostname' // e.g. Localhost or your domain
         msg       : 'Some message' // Or the error.message
         ...Ór the name-value pair of the object instead of msg...
     }
