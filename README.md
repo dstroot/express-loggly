@@ -30,8 +30,6 @@ Express middleware to send JSON formatted logs to Loggly from an Express applica
 
 ##Usage
 
-Prepare like so
-
     var config = {
         token: 'your-really-long-input-token',
         subdomain: 'your-loggly-subdomain',
