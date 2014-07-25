@@ -50,24 +50,22 @@ And logger has an additional ad-hoc methods for logging
 
 - debug, info, log, warn, error
 
-###Middleware
+###Middleware Usage
 
     var app = express();
-    //sequence of use() matters!
+    
+    // sequence of use() matters!
+    // Put this after session and bodyParser
+    
     app.use(logger.requestLogger()); // <-- log requests
-    app.use(app.router);
-    app.use(function(req, res, next){
-        // Since this is the last non-error-handling middleware use()d, we assume 404, as nothing else responded.
-        res.statusCode = 404;
-        return next(new Error('Page not found'));
-    });
-    // error-handling middleware starts here! They take the same form as regular middleware,
-    // however they require an arity of 4, aka the signature (err, req, res, next).
-    // when connect has an error, it will invoke ONLY error-handling middleware.
+
+    // error-handling middleware starts after all routes and static serving
+    // It takes the same form as regular middleware, however it requires
+    // an arity of 4, aka the signature (err, req, res, next).
+    // when express has an error, it will invoke ONLY error-handling middleware.
+    
     app.use(logger.errorLogger()); // <-- log errors
-    app.use(function(err, req, res, next) {
-        res.json(500, { status : "error", error: (typeof err === 'string' ? err : err.message) });
-    });
+
 
 ###Ad-hoc logging
 
@@ -89,7 +87,7 @@ The first parameter may be a string, object or an instance of an error. The mess
         machine   : 'server_name', // whatever is returned by require('os')
         hostname  : 'req.hostname' // e.g. Localhost or your domain
         msg       : 'Some message' // Or the error.message
-        ...Ór the name-value pair of the object instead of msg...
+        ...Or the name-value pair of the object instead of msg...
     }
     
 
