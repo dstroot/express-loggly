@@ -49,14 +49,21 @@ logger now has 2 methods for Express middleware:
     var app = express();
     
     // sequence of use() matters!
-    // Put this after session and bodyParser
     
+    // Body parsing middleware 
+    app.use(bodyParser.urlencoded({ extended: true }));
+
+    // Use sessions
+    app.use(session(config.session));
+
+    // Put this after session and bodyParser
     app.use(logger.requestLogger()); // <-- log requests
 
-    // error-handling middleware starts after all routes and static serving
-    // It takes the same form as regular middleware, however it requires
-    // an arity of 4, aka the signature (err, req, res, next).
-    // when express has an error, it will invoke ONLY error-handling middleware.
+    // Error-handling middleware starts *after all routes* (and serving any 
+    // static files). It takes the same form as regular middleware, however 
+    // it requires an arity of 4, aka the signature (err, req, res, next).
+    // When express has an error, it will invoke ONLY error-handling middleware.
+    // Put this *after* all routes, in your error handling section of middleware.
     
     app.use(logger.errorLogger()); // <-- log errors
 
