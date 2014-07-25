@@ -46,10 +46,6 @@ logger now has 2 methods for Express middleware:
 - requestLogger
 - errorLogger
 
-And logger has an additional ad-hoc methods for logging
-
-- debug, info, log, warn, error
-
 ###Middleware Usage
 
     var app = express();
@@ -69,7 +65,7 @@ And logger has an additional ad-hoc methods for logging
 
 ###Ad-hoc logging
 
-These methods log to Loggly as well 
+logger has additional ad-hoc methods for logging also. These methods log to Loggly as well:
 
     logger.debug('Some message'); // <-- logs with level=DEBUG
     logger.info('Some message');  // <-- logs with level=INFO
