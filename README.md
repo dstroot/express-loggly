@@ -1,12 +1,8 @@
-[![Build status][build-badge]][build-url]
 [![Dependency status][dependency-badge]][dependency-url]
 [![DevDependency status][dev-dep-badge]][dev-dep-url]
 [![Licensing][license-badge]][license-url]
 [![Release][release-badge]][release-url]
 [![Issue tracking][issues-badge]][issues-url]
-
-[build-badge]: http://img.shields.io/travis/dstroot/express-loggly.svg?style=flat
-[build-url]: https://travis-ci.org/dstroot/express-loggly
 
 [dependency-badge]: http://img.shields.io/david/dstroot/express-loggly.svg?style=flat
 [dependency-url]: https://david-dm.org/dstroot/express-loggly
