@@ -1,3 +1,28 @@
+[![Build status][build-badge]][build-url]
+[![Dependency status][dependency-badge]][dependency-url]
+[![DevDependency status][dev-dep-badge]][dev-dep-url]
+[![Licensing][license-badge]][license-url]
+[![Release][release-badge]][release-url]
+[![Issue tracking][issues-badge]][issues-url]
+
+[build-badge]: http://img.shields.io/travis/dstroot/express-loggly.svg?style=flat
+[build-url]: https://travis-ci.org/dstroot/express-loggly
+
+[dependency-badge]: http://img.shields.io/david/dstroot/express-loggly.svg?style=flat
+[dependency-url]: https://david-dm.org/dstroot/express-loggly
+
+[dev-dep-badge]: http://img.shields.io/david/dev/dstroot/express-loggly.svg?style=flat
+[dev-dep-url]: https://david-dm.org/dstroot/express-loggly#info=devDependencies
+
+[license-badge]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
+[license-url]: #license
+
+[release-badge]: http://img.shields.io/github/release/dstroot/express-loggly.svg?style=flat
+[release-url]: https://github.com/dstroot/express-loggly/releases
+
+[issues-badge]: http://img.shields.io/github/issues/dstroot/express-loggly.svg?style=flat
+[issues-url]: https://github.com/dstroot/express-loggly/issues
+
 express-loggly
 ===================
 
