@@ -1,11 +1,5 @@
 'use strict';
 
-/*!
- * Express2Loggly
- * Copyright(c) 2014 Daniel Stroot
- * MIT Licensed
- */
-
 // Example:
 //  - http://www.hacksparrow.com/how-to-write-midddleware-for-connect-express-js.html
 // Other middleware for logging:
