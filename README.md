@@ -22,75 +22,66 @@
 express-loggly
 ===================
 
-Express middleware to send JSON formatted logs to Loggly from an Express application.  It uses [node-loggly](https://github.com/nodejitsu/node-loggly) by nodejitsu.
+Express middleware to send JSON formatted logs to Loggly from an Express application.  Use this logger to send all web traffic to Loggly for capture and analysis.  It uses [node-loggly](https://github.com/nodejitsu/node-loggly) by nodejitsu.
 
-##Install
+Why JSON Logs?
 
-    npm install express-loggly --save
+https://journal.paul.querna.org/articles/2011/12/26/log-for-machines-in-json/
 
-##Usage
+http://blog.nodejs.org/2012/03/28/service-logging-in-json-with-bunyan/
 
-    var config = {
-        token: 'your-really-long-input-token',
-        subdomain: 'your-loggly-subdomain',
-        tags: ['tag1', 'tag2', ... 'tagN'] 
-    };
+## Install
 
-    var logger  = require('express-loggly')(config);
-    
+```
+npm install express-loggly --save
+```
 
-logger now has 2 methods for Express middleware:
+## Usage
 
-- requestLogger
-- errorLogger
+```js
+var express = require('express')
+var logger  = require('express-loggly')
 
-###Middleware Usage
+var app = express()
 
-    var app = express();
-    
-    // sequence of use() matters!
-    
-    // Body parsing middleware 
-    app.use(bodyParser.urlencoded({ extended: true }));
+// Setup Loggly configuration
+var config = {
+    token: 'your-really-long-input-token',
+    subdomain: 'your-loggly-subdomain',
+    tags: ['tag1', 'tag2', ... 'tagN'] 
+};
 
-    // Use sessions
-    app.use(session(config.session));
+// Sequence of use() matters!
+// Put this *after* session and bodyParser
 
-    // Put this after session and bodyParser
-    app.use(logger.requestLogger()); // <-- log requests
+app.use(logger({ loggly: config }));
+```
 
-    // Error-handling middleware starts *after all routes* (and serving any 
-    // static files). It takes the same form as regular middleware, however 
-    // it requires an arity of 4, aka the signature (err, req, res, next).
-    // When express has an error, it will invoke ONLY error-handling middleware.
-    // Put this *after* all routes, in your error handling section of middleware.
-    
-    app.use(logger.errorLogger()); // <-- log errors
+### Options
 
+#### immediate
 
-###Ad-hoc logging
+Write logs on request instead of response. This means that a requests will be logged even if the server crashes, but data from the response cannot be logged (like the response code).  Use like this:
 
-logger has additional ad-hoc methods for logging also. These methods log to Loggly as well:
+```js
+app.use(logger({
+  immediate: true,
+  loggly: config
+}));
+```
 
-    logger.debug('Some message'); // <-- logs with level=DEBUG
-    logger.info('Some message');  // <-- logs with level=INFO
-    logger.log('Some message');   // <-- logs with level=LOG
-    logger.warn('Some message');  // <-- logs with level=WARN
-    logger.error('Some message'); // <-- logs with level=ERROR
+## License
 
-These methods actually take 2 parameters. The second one being an array of additional tags your want to capture in Loggly.
+The MIT License (MIT)
 
-The first parameter may be a string, object or an instance of an error. The message is always transformed to an object with this signature: 
+Copyright (c) 2014 Daniel Stroot dan@thestroots.com
 
-    {
-        level     : 'DEBUG'        // Or INFO, LOG, WARN, ERROR
-        pid       : 1234,          // whatever is returned by process.id 
-        machine   : 'server_name', // whatever is returned by require('os')
-        hostname  : 'req.hostname' // e.g. Localhost or your domain
-        msg       : 'Some message' // Or the error.message
-        ...Or the name-value pair of the object instead of msg...
-    }
-    
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 
 
 

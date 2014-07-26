@@ -20,14 +20,34 @@
   },
   "dependencies": {
     "debug": "^1.0.4",
+    "finished": "^1.2.2",
     "loggly": "^1.0.4",
     "request": "^2.39.0",
     "underscore": "^1.6.0",
     "useragent": "^2.0.9",
     "yamlparser": "^0.0.2"
   },
+  "devDependencies": {
+    "istanbul": "0.3.0",
+    "mocha": "~1.20.1",
+    "should": "~4.0.4",
+    "supertest": "~0.13.0",
+    "gulp": "^3.8.6",
+    "gulp-jscs": "~0.6.0",
+    "gulp-jshint": "~1.7.1",
+    "gulp-util": "^3.0.0",
+    "gulp-load-plugins": "^0.5.3",
+    "gulp-watch": "^0.6.8",
+    "jshint-stylish": "~0.4.0",
+    "terminus": "^1.0.10"
+  },
   "engines": {
     "node": ">= 0.10.0"
+  },
+  "scripts": {
+    "test": "mocha --check-leaks --reporter spec --bail",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --check-leaks --reporter dot",
+    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --check-leaks --reporter spec"
   },
   "bugs": {
     "url": "https://github.com/dstroot/express-loggly/issues"
