@@ -60,8 +60,7 @@ app.use(logger({ loggly: config }));
 
 #### immediate
 
-Write log line on request instead of response. This means that a  requests will
-be logged even if the server crashes, but data from the response cannot be logged (like the response code).  Looks like this:
+Write logs on request instead of response. This means that a requests will be logged even if the server crashes, but data from the response cannot be logged (like the response code).  Use like this:
 
 ```js
 app.use(logger({
