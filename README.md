@@ -53,7 +53,6 @@ var config = {
 // Sequence of use() matters!
 // Put this *after* session and bodyParser
 
-// Use the logger
 app.use(logger({ loggly: config }));
 ```
 
