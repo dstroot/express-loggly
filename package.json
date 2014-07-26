@@ -52,13 +52,5 @@
   "bugs": {
     "url": "https://github.com/dstroot/express-loggly/issues"
   },
-  "readme": "https://github.com/dstroot/express-loggly/blob/master/README.md",
-  "homepage": "https://github.com/dstroot/express-loggly",
-  "_id": "express-loggly@0.0.1",
-  "dist": {
-    "shasum": "4df120a5199207956dd058d835a929ad7018daad"
-  },
-  "_resolved": "https://github.com/dstroot/express-loggly/tarball/master",
-  "_from": "https://github.com/dstroot/express-loggly/tarball/master",
-  "_shasum": "4b1eb29ee65af4d93980f432c76befa3cd47c812"
+  "readme": "https://github.com/dstroot/express-loggly/blob/master/README.md"
 }
