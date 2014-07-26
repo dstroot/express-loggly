@@ -32,6 +32,7 @@ exports = module.exports = function (options) {
   var immediate = options.immediate || false;
   var config = options.loggly || {};
 
+  // If a configuration was not passed do nothing
   if (_.isEmpty(config)) {
     debug('Error: Loggly configuration was not passed in!');
     // do nothing
@@ -42,17 +43,6 @@ exports = module.exports = function (options) {
 
   // Create Loggly client using passed in configuration
   var client = loggly.createClient(config);
-
-  // Define tags for Loggly
-  var expressTags = ['node', 'express', 'http'];
-  var adhocTags   = ['node', 'express'];
-
-  // Combine with configured tags
-  if (config.tags instanceof Array) {
-    debug('Config Tags: ' + config.tags.toString());
-    expressTags = _.uniq(expressTags.concat(config.tags));
-    adhocTags   = _.uniq(adhocTags.concat(config.tags));
-  }
 
   // Get machine name & PID
   var machine = os.hostname();
@@ -127,7 +117,7 @@ exports = module.exports = function (options) {
       // Create log record
       var record = logFormat(req, res);
       // Send it to Loggly
-      client.log(record, expressTags, function (err, result) {
+      client.log(record, config.tags, function (err, result) {
         if (err) {
           debug(err.message);
         } else {
