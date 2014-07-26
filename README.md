@@ -27,6 +27,7 @@ Express middleware to send JSON formatted logs to Loggly from an Express applica
 Why JSON Logs?
 
 https://journal.paul.querna.org/articles/2011/12/26/log-for-machines-in-json/
+
 http://blog.nodejs.org/2012/03/28/service-logging-in-json-with-bunyan/
 
 ## Install
