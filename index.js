@@ -29,9 +29,7 @@ exports = module.exports = function (options) {
 
   // Get & read options
   options = options || {};
-  var immediate = options.immediate;
-  var stream = options.stream || process.stdout;
-  var buffer = options.buffer;
+  var immediate = options.immediate || false;
   var config = options.loggly || {};
 
   if (_.isEmpty(config)) {
@@ -60,41 +58,14 @@ exports = module.exports = function (options) {
   var machine = os.hostname();
   var pid = process.pid.toString();
 
-  // Buffering support
-  if (buffer) {
-    var realStream = stream;
-    var buf = [];
-    var timer = null;
-    var interval = 1000; // how long before we flush?
-
-    // Flush function
-    var flush = function () {
-      timer = null;
-      if (buf.length) {
-        realStream.write(buf.join(''));
-        buf.length = 0;
-      }
-    };
-
-    // Swap the stream
-    stream = {
-      write: function (str) {
-        if (timer === null) {
-          timer = setTimeout(flush, interval);
-        }
-        buf.push(str);
-      }
-    };
-  }
-
   // Logging format
   var logFormat = function (req, res) {
 
-    // get response time and content length
+    // Get response time and content length
     var time = getResponseTime (req, res);
     var content = getLength(req, res, 'content-length');
 
-    // Set Levels
+    // Set log levels
     var level;
     if (res.statusCode >= 500) {
       level = 'ERROR';
@@ -104,14 +75,16 @@ exports = module.exports = function (options) {
       level = 'INFO';
     }
 
-    // Define JSON object
-    var fields = {
+    // Define JSON record object
+    var recordObj = {
       'date'            : new Date().toUTCString(),  // Note UTC
       'level'           : level,
+
       'server'          : {
         'server-name'   : machine,
         'pid'           : pid
       },
+
       'request'         : {
         'method'        : req.method,
         'protocol'      : req.protocol,
@@ -125,30 +98,35 @@ exports = module.exports = function (options) {
                           (req.socket && req.socket.remoteAddress) ||
                           (req.socket.socket && req.socket.socket.remoteAddresss)
       },
+
       'response'        : {
         'status'        : res._headers ? res.statusCode.toString() : '',
         'content-length': content ? content + ' bytes' : '',
         'response-time' : time + ' ms'
       },
-      // 'url'            : req.originalUrl || req.url,
+
+      'url'             : req.originalUrl || req.url,
       'user-agent'      : useragent.lookup(req.headers['user-agent']),
       'referrer'        : req.headers['referer'] || req.headers['referrer']
+
       // 'req-headers'    : req.headers,
       // 'res-headers'    : res._headers
+
     };
 
-    return fields;
+    return recordObj;
   };
 
+  // Main logging middleware
   return function logger (req, res, next) {
+    // Capture start time
     req._startAt = process.hrtime();
     req._startTime = new Date();
-    req._remoteAddress = req.connection && req.connection.remoteAddress;
 
     function logRequest () {
+      // Create log record
       var record = logFormat(req, res);
-
-      // Log to Loggly
+      // Send it to Loggly
       client.log(record, expressTags, function (err, result) {
         if (err) {
           debug(err.message);
@@ -159,15 +137,14 @@ exports = module.exports = function (options) {
       });
     }
 
-    // Immediate or not
     if (immediate) {
       logRequest();
     } else {
+      // Wait for response
       onFinished(res, logRequest);
     }
 
-    // Make sure you call next(), or else you will end up
-    // with a hung application.
+    // Call next(), otherwise you will hang the application.
     next();
   };
 
