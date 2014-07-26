@@ -30,7 +30,7 @@ var paths = {
 gulp.task('lint', function () {
   return gulp.src(paths.lint)               // Read .js files
     .pipe($.jshint())                       // lint .js files
-    .pipe($.jshint.reporter($.stylish));    // Use stylish reporter
+    .pipe($.jshint.reporter('jshint-stylish'));    // Use stylish reporter
 });
 
 /**
