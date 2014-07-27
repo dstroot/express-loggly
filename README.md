@@ -63,7 +63,7 @@ app.use(logger({ loggly: config }));
 
 Write logs on request instead of response. This means that a requests will be logged even if the server crashes, but data from the response cannot be logged (like the response code).  Use like this:
 
-```js
+```
 app.use(logger({
   immediate: true,
   loggly: config
