@@ -13,10 +13,6 @@ var onFinished  = require('finished');
 
 /**
  * Create middleware.
- *
- * @param {Object} [options]
- * @return {Function} middleware
- * @api public
  */
 
 exports = module.exports = function (options) {
@@ -27,7 +23,7 @@ exports = module.exports = function (options) {
   // Always up-to-date agent parsing!
   useragent(true);
 
-  // Get & read options
+  // Get options
   options = options || {};
   var immediate = options.immediate || false;
   var config = options.loggly || {};
@@ -111,7 +107,6 @@ exports = module.exports = function (options) {
   return function logger (req, res, next) {
     // Capture start time
     req._startAt = process.hrtime();
-    req._startTime = new Date();
 
     function logRequest () {
       // Create log record
@@ -138,17 +133,19 @@ exports = module.exports = function (options) {
     next();
   };
 
-};
-
-function getResponseTime (req, res) {
-  if (!res._header || !req._startAt) {
-    return '';
+  // Calculate response time
+  function getResponseTime (req, res) {
+    if (!res._header || !req._startAt) {
+      return '';
+    }
+    var diff = process.hrtime(req._startAt);
+    var ms = diff[0] * 1e3 + diff[1] * 1e-6;
+    return ms.toFixed(3);
   }
-  var diff = process.hrtime(req._startAt);
-  var ms = diff[0] * 1e3 + diff[1] * 1e-6;
-  return ms.toFixed(3);
-}
 
-function getLength (req, res, field) {
-  return (res._headers || {})[field.toLowerCase()];
-}
+  // Get response length
+  function getLength (req, res, field) {
+    return (res._headers || {})[field.toLowerCase()];
+  }
+
+};

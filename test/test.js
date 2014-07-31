@@ -5,7 +5,7 @@
 // process.env.NO_DEPRECATION = 'morgan';
 
 var http = require('http');
-var morgan = require('..');
+var express2loggly = require('..');
 var should = require('should');
 var request = require('supertest');
 
@@ -500,68 +500,27 @@ describe('logger()', function () {
   //     });
   //   });
   // });
-
-  describe('with buffer option', function () {
-    it('should flush log periodically', function (done) {
-      var count = 0;
-      var server = createServer(':method :url', {
-        buffer: true,
-        stream: { write: writeLog }
-      });
-
-      function writeLog(log) {
-        log.should.equal('GET /first\nGET /second\n');
-        server.close();
-        done();
-      }
-
-      server = server.listen();
-      request(server)
-      .get('/first')
-      .end(function (err, res) {
-        if (err) { throw err; }
-        count++;
-        request(server)
-        .get('/second')
-        .end(function (err, res) {
-          if (err) { throw err; }
-          count++;
-        });
-      });
-    });
-
-  //   it('should accept custom interval', function (done) {
-  //     var count = 0;
-  //     var server = createServer(':method :url', {
-  //       buffer: 200,
-  //       stream: { write: writeLog }
+  //
+  // describe('without Loggly configuration', function () {
+  //   it('should do nothing', function (done) {
+  //     var server = createServer({
+  //       // feed nothing in
   //     });
 
-  //     function writeLog(log) {
-  //       log.should.equal('GET /first\nGET /second\n');
-  //       server.close();
-  //       done();
-  //     }
-
-  //     server = server.listen();
   //     request(server)
-  //     .get('/first')
+  //     .get('/')
   //     .end(function (err, res) {
-  //       if (err) { throw err; }
-  //       count++;
-  //       request(server)
-  //       .get('/second')
-  //       .end(function (err, res) {
-  //         if (err) { throw err; }
-  //         count++;
-  //       });
+  //       if (err) { return done(err); }
+  //       lastLogLine.should.equal('heloo');
+  //       done();
   //     });
   //   });
-  });
+  // });
+
 
   describe('with immediate option', function () {
     it('should log before response', function (done) {
-      var server = createServer(':method :url :res[x-sent]', {
+      var server = createServer({
         immediate: true
       });
 
@@ -575,44 +534,9 @@ describe('logger()', function () {
     });
   });
 
-  // describe('with skip option', function () {
-  //   it('should be able to skip based on request', function (done) {
-  //     function skip (req) {
-  //       return ~req.url.indexOf('skip=true');
-  //     }
-
-  //     var server = createServer({ 'format': 'default', 'skip': skip });
-
-  //     request(server)
-  //     .get('/?skip=true')
-  //     .set('Connection', 'close')
-  //     .end(function (err, res) {
-  //       if (err) { return done(err); }
-  //       should.not.exist(lastLogLine);
-  //       done();
-  //     });
-  //   });
-
-  //   it('should be able to skip based on response', function (done) {
-  //     function skip(req, res) {
-  //       return res.statusCode === 200;
-  //     }
-
-  //     var server = createServer({ 'format': 'default', 'skip': skip });
-
-  //     request(server)
-  //     .get('/')
-  //     .end(function (err, res) {
-  //       if (err) { return done(err); }
-  //       should.not.exist(lastLogLine);
-  //       done();
-  //     });
-  //   });
-  // });
-
 });
 
-function createLogger (format, opts) {
+function createLogger (opts) {
   var args = Array.prototype.slice.call(arguments);
   var i = Number(typeof args[0] !== 'object');
   var options = args[i] || {};
@@ -623,14 +547,14 @@ function createLogger (format, opts) {
     args[i] = options;
   }
 
-  return morgan.apply(null, args);
+  return express2loggly.apply(args);
 }
 
-function createServer (format, opts, fn) {
-  var logger = createLogger(format, opts);
+function createServer (opts, fn) {
+  var logger = createLogger(opts);
   var middle = fn || noopMiddleware;
-  return http.createServer(function onRequest(req, res) {
-    logger(req, res, function onNext(err) {
+  return http.createServer(function onRequest (req, res) {
+    logger(req, res, function onNext (err) {
       // allow req, res alterations
       middle(req, res, function onDone() {
         if (err) {
