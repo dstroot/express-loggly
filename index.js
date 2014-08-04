@@ -8,8 +8,9 @@ var _           = require('underscore');
 var os          = require('os');
 var debug       = require('debug')('express-loggly');
 var loggly      = require('loggly');
+var finished    = require('finished');
 var useragent   = require('useragent');
-var finished  = require('finished');
+
 
 /**
  * Create middleware.
