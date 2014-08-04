@@ -37,7 +37,6 @@
     "gulp-jshint": "~1.8.0",
     "gulp-util": "^3.0.0",
     "gulp-load-plugins": "^0.5.3",
-    "gulp-watch": "^0.6.8",
     "jshint-stylish": "~0.4.0",
     "terminus": "^1.0.10"
   },
