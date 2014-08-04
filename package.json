@@ -33,7 +33,7 @@
     "should": "~4.0.4",
     "supertest": "~0.13.0",
     "gulp": "^3.8.6",
-    "gulp-jscs": "~1.0.0",
+    "gulp-jscs": "~1.1.0",
     "gulp-jshint": "~1.8.0",
     "gulp-util": "^3.0.0",
     "gulp-load-plugins": "^0.5.3",
