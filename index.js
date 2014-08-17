@@ -8,9 +8,8 @@ var _           = require('underscore');
 var os          = require('os');
 var debug       = require('debug')('express-loggly');
 var loggly      = require('loggly');
-var finished    = require('finished');
 var useragent   = require('useragent');
-
+var onFinished  = require('finished');
 
 /**
  * Create middleware.
@@ -127,7 +126,7 @@ exports = module.exports = function (options) {
       logRequest();
     } else {
       // Wait for response
-      finished(res, logRequest);
+      onFinished(res, logRequest);
     }
 
     // Call next(), otherwise hang the application.
