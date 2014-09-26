@@ -50,6 +50,5 @@
   },
   "bugs": {
     "url": "https://github.com/dstroot/express-loggly/issues"
-  },
-  "readme": "https://github.com/dstroot/express-loggly/blob/master/README.md"
+  }
 }
