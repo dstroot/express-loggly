@@ -24,7 +24,7 @@ express-loggly
 
 Express middleware to send JSON formatted logs to Loggly from an Express application.  Use this logger to send all web traffic to Loggly for capture and analysis.  It uses [node-loggly](https://github.com/nodejitsu/node-loggly) by nodejitsu.
 
-Why JSON Logs?
+Why JSON Logs? See:
 
 https://journal.paul.querna.org/articles/2011/12/26/log-for-machines-in-json/
 
@@ -69,6 +69,19 @@ app.use(logger({
   loggly: config
 }));
 ```
+
+### Release Notes
+
+Creating a release: (When everything is tested and ready for a new npm release)
+
+* Bump the version in your `package.json` file.
+* Commit that change with a message like "Release 0.0.5".
+* Push commit to Github
+* Create a new release tag:
+  * **Listing Tags:** type `git tag`
+  * **Creating Tags:** Use annotated tags - they’re checksummed; contain the tagger name, e-mail, and date; have a tagging message; and can be signed and verified with GNU Privacy Guard (GPG). `git tag -a v0.0.5 -m 'Release 0.0.5'`
+  * **Pushing Tags to Github:** By default the git push command doesn’t transfer tags to remote servers. You have to explicitly push tags. You run git push origin [tagname].  `git push origin v0.0.5`
+* Publish the new version to npm: `npm publish https://github.com/dstroot/express-loggly/archive/0.0.5.tar.gz --tag 0.0.5`
 
 ## License
 
